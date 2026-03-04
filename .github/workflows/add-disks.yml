@@ -54,5 +54,5 @@ jobs:
         DATA_DISK_CACHE: ${{ github.event.inputs.disk_cache }}
 
       run: |
-        chmod +x stack-iaas-iac/add-data-disks.sh
-        ./stack-iaas-iac/add-data-disks.sh
+        chmod +x add-data-disks.sh
+        ./add-data-disks.sh
