@@ -1,0 +1,150 @@
+name: 🚀 Create Azure VM
+
+on:
+  workflow_dispatch:
+    inputs:
+
+      subscription_id:
+        description: "ID da Subscription"
+        required: true
+
+      resource_group:
+        description: "Resource Group da VM"
+        required: true
+
+      vnet_rg:
+        description: "Resource Group da VNet"
+        required: true
+
+      vm_name:
+        description: "Nome da VM"
+        required: true
+
+      location:
+        description: "Região"
+        required: true
+        default: "brazilsouth"
+
+      availability_zone:
+        description: "Availability Zone (1,2,3)"
+        required: true
+
+      vm_size:
+        description: "Tamanho da VM"
+        required: true
+        default: "Standard_D2as_v5"
+
+      image:
+        description: "Imagem (ex: Canonical:0001-com-ubuntu-server-focal:20_04-lts:latest)"
+        required: true
+
+      admin_user:
+        description: "Usuário administrador"
+        required: true
+
+      admin_pass:
+        description: "Senha administrador"
+        required: true
+
+      vnet_name:
+        description: "Nome da VNet existente"
+        required: true
+
+      subnet_name:
+        description: "Nome da Subnet existente"
+        required: true
+
+      ip_fixo:
+        description: "IP fixo? (sim/nao)"
+        required: true
+        default: "nao"
+
+      private_ip:
+        description: "IP privado (se fixo)"
+        required: false
+
+      accel_net:
+        description: "Accelerated Networking? (sim/nao)"
+        required: true
+        default: "nao"
+
+      os_disk_size:
+        description: "Tamanho disco OS (GB)"
+        required: true
+        default: "128"
+
+      storage_sku:
+        description: "Tipo disco (Standard_LRS, Premium_LRS, StandardSSD_LRS)"
+        required: true
+        default: "Premium_LRS"
+
+      boot_diag_storage:
+        description: "Storage Boot Diagnostics"
+        required: true
+
+      tag_hostname:
+        description: "Tag Hostname"
+        required: true
+
+      tag_env:
+        description: "Tag Environment"
+        required: true
+
+      tag_sistema:
+        description: "Tag Sistema"
+        required: true
+
+      tag_faturavel:
+        description: "Tag Faturável (Sim/Não)"
+        required: true
+
+      tag_chg:
+        description: "Tag CHG"
+        required: true
+
+      tag_tvt:
+        description: "Tag TVT"
+        required: true
+
+jobs:
+  create-vm:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: 🔐 Login Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 🚀 Executar Script
+      env:
+        SUBSCRIPTION_ID: ${{ github.event.inputs.subscription_id }}
+        RESOURCE_GROUP: ${{ github.event.inputs.resource_group }}
+        VNET_RG: ${{ github.event.inputs.vnet_rg }}
+        VM_NAME: ${{ github.event.inputs.vm_name }}
+        LOCATION: ${{ github.event.inputs.location }}
+        AVAILABILITY_ZONE: ${{ github.event.inputs.availability_zone }}
+        VM_SIZE: ${{ github.event.inputs.vm_size }}
+        IMAGE: ${{ github.event.inputs.image }}
+        ADMIN_USER: ${{ github.event.inputs.admin_user }}
+        ADMIN_PASS: ${{ github.event.inputs.admin_pass }}
+        VNET_NAME: ${{ github.event.inputs.vnet_name }}
+        SUBNET_NAME: ${{ github.event.inputs.subnet_name }}
+        IP_FIXO: ${{ github.event.inputs.ip_fixo }}
+        PRIVATE_IP: ${{ github.event.inputs.private_ip }}
+        ACCEL_NET: ${{ github.event.inputs.accel_net }}
+        OS_DISK_SIZE: ${{ github.event.inputs.os_disk_size }}
+        STORAGE_SKU: ${{ github.event.inputs.storage_sku }}
+        BOOT_DIAG_STORAGE: ${{ github.event.inputs.boot_diag_storage }}
+        TAG_HOSTNAME: ${{ github.event.inputs.tag_hostname }}
+        TAG_ENV: ${{ github.event.inputs.tag_env }}
+        TAG_SISTEMA: ${{ github.event.inputs.tag_sistema }}
+        TAG_FATURAVEL: ${{ github.event.inputs.tag_faturavel }}
+        TAG_CHG: ${{ github.event.inputs.tag_chg }}
+        TAG_TVT: ${{ github.event.inputs.tag_tvt }}
+
+      run: |
+        chmod +x create-vm.sh
+        ./create-vm.sh
