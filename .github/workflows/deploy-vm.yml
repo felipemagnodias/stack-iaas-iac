@@ -18,7 +18,7 @@ jobs:
 
     - name: 🚀 Executar Script
       env:
-        SUBSCRIPTION_ID: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        SUBSCRIPTION_ID: "1a6a11af-b98f-4269-8e50-2e8012bcf8f7"
         RESOURCE_GROUP: "RG-EASTU-NETWORK"
         VNET_RG: "RG-EASTU-NETWORK"
         VM_NAME: "VM-ZRS"
