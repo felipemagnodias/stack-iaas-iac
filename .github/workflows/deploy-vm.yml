@@ -33,7 +33,7 @@ jobs:
         ACCEL_NET: "sim"
         OS_DISK_SIZE: "128"
         STORAGE_SKU: "Standard_LRS"
-        BOOT_DIAG_STORAGE: "stbootdiagprod"
+        BOOT_DIAG_STORAGE: "storagebootlrs"
         TAG_HOSTNAME: "VM-ZRS"
         TAG_ENV: "PRD"
         TAG_SISTEMA: "Linux"
