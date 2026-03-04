@@ -1,0 +1,46 @@
+name: 🚀 Deploy VM Azure
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🔐 Login Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 🚀 Executar Script
+      env:
+        SUBSCRIPTION_ID: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        RESOURCE_GROUP: "RG-EASTU-NETWORK"
+        VNET_RG: "RG-EASTU-NETWORK"
+        VM_NAME: "VM-ZRS"
+        LOCATION: "eastus"
+        VM_SIZE: "Standard_D4as_v5"
+        IMAGE: "Canonical:0001-com-ubuntu-server-jammy:22_04-lts:latest"
+        ADMIN_USER: "azureuser"
+        ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
+        VNET_NAME: "VNET-EASTU-NETWORK"
+        SUBNET_NAME: "SNET-EASTU-NETWORK"
+        IP_FIXO: "nao"
+        ACCEL_NET: "sim"
+        OS_DISK_SIZE: "128"
+        STORAGE_SKU: "Standard_LRS"
+        BOOT_DIAG_STORAGE: "storagebootlrs"
+        TAG_HOSTNAME: "VM-LRS"
+        TAG_ENV: "POC"
+        TAG_SISTEMA: "POC"
+        TAG_FATURAVEL: "Sim"
+        TAG_CHG: "12345"
+        TAG_TVT: "001"
+
+      run: |
+        chmod +x deploy-vm.sh
+        ./deploy-vm.sh
