@@ -1,0 +1,82 @@
+name: 🏗️ Create Resource Group
+
+on:
+  workflow_dispatch:
+    inputs:
+      subscription_id:
+        description: "ID da Subscription"
+        required: true
+
+      rg_name:
+        description: "Nome do Resource Group"
+        required: true
+
+      location:
+        description: "Região (ex: brazilsouth)"
+        required: true
+        default: "brazilsouth"
+
+      tag_hostname:
+        description: "Hostname"
+        required: true
+
+      tag_env:
+        description: "Ambiente (DEV, QA, PRD)"
+        required: true
+
+      tag_service:
+        description: "Serviço"
+        required: true
+        default: "Resource Group"
+
+      tag_management:
+        description: "Responsável pelo gerenciamento"
+        required: true
+        default: "TIVIT"
+
+      tag_sistema:
+        description: "Sistema associado"
+        required: true
+
+      tag_faturavel:
+        description: "Faturável? (Sim/Não)"
+        required: true
+
+      tag_chg:
+        description: "Código CHG"
+        required: true
+
+      tag_tvt:
+        description: "Código TVT"
+        required: true
+
+jobs:
+  create-rg:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🔐 Login Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 🚀 Executar Script
+      env:
+        SUBSCRIPTION_ID: ${{ github.event.inputs.subscription_id }}
+        RG_NAME: ${{ github.event.inputs.rg_name }}
+        LOCATION: ${{ github.event.inputs.location }}
+        TAG_HOSTNAME: ${{ github.event.inputs.tag_hostname }}
+        TAG_ENV: ${{ github.event.inputs.tag_env }}
+        TAG_SERVICE: ${{ github.event.inputs.tag_service }}
+        TAG_MANAGEMENT: ${{ github.event.inputs.tag_management }}
+        TAG_SISTEMA: ${{ github.event.inputs.tag_sistema }}
+        TAG_FATURAVEL: ${{ github.event.inputs.tag_faturavel }}
+        TAG_CHG: ${{ github.event.inputs.tag_chg }}
+        TAG_TVT: ${{ github.event.inputs.tag_tvt }}
+
+      run: |
+        chmod +x scripts/create-rg.sh
+        ./scripts/create-rg.sh
