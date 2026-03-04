@@ -78,5 +78,5 @@ jobs:
         TAG_TVT: ${{ github.event.inputs.tag_tvt }}
 
       run: |
-        chmod +x scripts/create-rg.sh
-        ./scripts/create-rg.sh
+        chmod +x create-rg.sh
+        ./create-rg.sh
