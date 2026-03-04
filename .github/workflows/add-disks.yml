@@ -1,0 +1,58 @@
+name: 💾 Add Data Disks to VM
+
+on:
+  workflow_dispatch:
+    inputs:
+      subscription_id:
+        description: "Subscription ID"
+        required: true
+      resource_group:
+        description: "Resource Group da VM"
+        required: true
+      vm_name:
+        description: "Nome da VM"
+        required: true
+      location:
+        description: "Região (ex: brazilsouth)"
+        required: true
+      num_disks:
+        description: "Quantidade de discos (1 a 4)"
+        required: true
+      disk_size:
+        description: "Tamanho do disco (GB)"
+        required: true
+      disk_sku:
+        description: "Tipo do disco (Standard_LRS, Premium_LRS, StandardSSD_LRS)"
+        required: true
+      disk_cache:
+        description: "Cache (None, ReadOnly, ReadWrite)"
+        required: true
+        default: "ReadWrite"
+
+jobs:
+  add-disks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🔐 Login Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 💾 Executar Script
+      env:
+        SUBSCRIPTION_ID: ${{ github.event.inputs.subscription_id }}
+        RESOURCE_GROUP: ${{ github.event.inputs.resource_group }}
+        VM_NAME: ${{ github.event.inputs.vm_name }}
+        LOCATION: ${{ github.event.inputs.location }}
+        NUM_DISKS: ${{ github.event.inputs.num_disks }}
+        DATA_DISK_SIZE: ${{ github.event.inputs.disk_size }}
+        DATA_DISK_SKU: ${{ github.event.inputs.disk_sku }}
+        DATA_DISK_CACHE: ${{ github.event.inputs.disk_cache }}
+
+      run: |
+        chmod +x scripts/add-data-disks.sh
+        ./scripts/add-data-disks.sh
